@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router'
 
 const links = [
   { label: 'Features', href: '#features' },
@@ -28,12 +29,12 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#get-started"
+          <Link
+            to="/documents"
             className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-500"
           >
             Get Started
-          </a>
+          </Link>
         </div>
 
         <button
@@ -68,13 +69,13 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="#get-started"
+            <Link
+              to="/documents"
               onClick={() => setIsOpen(false)}
               className="rounded-lg bg-violet-600 px-4 py-2 text-center text-sm font-semibold text-white transition hover:bg-violet-500"
             >
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       )}

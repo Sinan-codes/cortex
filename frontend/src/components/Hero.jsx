@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden px-6 pb-20 pt-16 sm:pt-24">
@@ -23,12 +25,12 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
-            <a
-              href="#get-started"
+            <Link
+              to="/documents"
               className="rounded-lg bg-violet-600 px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-violet-500"
             >
               Get Started
-            </a>
+            </Link>
             <a
               href="#how-it-works"
               className="rounded-lg border border-slate-700 px-6 py-3 text-center text-sm font-semibold text-slate-200 transition hover:border-slate-500"
