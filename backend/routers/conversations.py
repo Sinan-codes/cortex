@@ -130,16 +130,18 @@ def send_message(
 
     top_matches = chunk_query.order_by(distance).limit(settings.retrieval_top_k).all()
 
-    answer = generate_answer(
+    answer, is_grounded = generate_answer(
         question=body.content,
         context_chunks=[chunk.content for chunk, _ in top_matches],
         history=history,
     )
 
     assistant_message = Message(conversation_id=conversation.id, role=MessageRole.assistant, content=answer)
-    assistant_message.citations = [
-        MessageCitation(chunk_id=chunk.id, score=1 - dist) for chunk, dist in top_matches
-    ]
+    assistant_message.citations = (
+        [MessageCitation(chunk_id=chunk.id, score=1 - dist) for chunk, dist in top_matches]
+        if is_grounded
+        else []
+    )
     db.add(assistant_message)
 
     conversation.updated_at = datetime.now(timezone.utc)

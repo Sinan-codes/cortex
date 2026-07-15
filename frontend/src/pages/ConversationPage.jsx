@@ -4,6 +4,7 @@ import { listMessages, sendMessage } from '../lib/api'
 import ConversationSidebar from '../components/conversations/ConversationSidebar'
 import MessageBubble from '../components/chat/MessageBubble'
 import MessageComposer from '../components/chat/MessageComposer'
+import ThinkingIndicator from '../components/chat/ThinkingIndicator'
 
 export default function ConversationPage() {
   const { conversationId } = useParams()
@@ -22,7 +23,7 @@ export default function ConversationPage() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, isSending])
 
   async function handleSend(content) {
     const optimisticMessage = {
@@ -59,6 +60,7 @@ export default function ConversationPage() {
               {messages.map((message) => (
                 <MessageBubble key={message.id} message={message} />
               ))}
+              {isSending ? <ThinkingIndicator /> : null}
               <div ref={bottomRef} />
             </div>
           )}

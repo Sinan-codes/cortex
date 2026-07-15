@@ -10,10 +10,14 @@ def _get_client() -> OpenAI:
     return OpenAI(api_key=settings.openai_api_key)
 
 
+FALLBACK_MARKER = "[[GENERAL_KNOWLEDGE]]"
+FALLBACK_NOTE = "This isn't covered in your documents, but here's what I know:\n\n"
+
 SYSTEM_PROMPT = (
     "You are a helpful assistant answering questions about the user's uploaded documents. "
-    "Answer only using the provided context. If the context doesn't contain the answer, "
-    "say you don't know rather than guessing."
+    "Answer using the provided context whenever it's relevant. If the context doesn't contain "
+    f"the answer, begin your reply with the exact token {FALLBACK_MARKER} and then answer from "
+    "your own general knowledge instead."
 )
 
 
@@ -28,7 +32,11 @@ def embed_text(text: str) -> list[float]:
     return embed_texts([text])[0]
 
 
-def generate_answer(question: str, context_chunks: list[str], history: list[dict[str, str]]) -> str:
+def generate_answer(
+    question: str, context_chunks: list[str], history: list[dict[str, str]]
+) -> tuple[str, bool]:
+    """Returns (answer, is_grounded). is_grounded is False when the model fell back to
+    its own general knowledge rather than the provided document context."""
     context = "\n\n---\n\n".join(context_chunks) or "No relevant context was found."
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     messages.extend(history)
@@ -39,4 +47,8 @@ def generate_answer(question: str, context_chunks: list[str], history: list[dict
         }
     )
     response = _get_client().chat.completions.create(model=settings.chat_model, messages=messages)
-    return response.choices[0].message.content or ""
+    content = (response.choices[0].message.content or "").strip()
+
+    if content.startswith(FALLBACK_MARKER):
+        return FALLBACK_NOTE + content[len(FALLBACK_MARKER):].lstrip(), False
+    return content, True
