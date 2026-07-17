@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
-import { listMessages, sendMessage } from '../lib/api'
+import { ApiError, listMessages, sendMessage } from '../lib/api'
 import ConversationSidebar from '../components/conversations/ConversationSidebar'
 import MessageBubble from '../components/chat/MessageBubble'
 import MessageComposer from '../components/chat/MessageComposer'
@@ -38,8 +38,8 @@ export default function ConversationPage() {
     try {
       const assistantMessage = await sendMessage(conversationId, content)
       setMessages((prev) => [...prev, assistantMessage])
-    } catch {
-      setError('Message failed to send. Please try again.')
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Message failed to send. Please try again.')
     } finally {
       setIsSending(false)
     }

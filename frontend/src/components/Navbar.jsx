@@ -13,9 +13,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-slate-800/60 bg-slate-950/80 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#" className="flex items-center gap-2 text-lg font-semibold text-white">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-sm font-bold">
-            C
-          </span>
+          <img src="/android-chrome-192x192.png" alt="" className="h-8 w-8 rounded-lg" />
           Cortex
         </a>
 

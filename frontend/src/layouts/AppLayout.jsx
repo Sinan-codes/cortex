@@ -11,9 +11,7 @@ export default function AppLayout() {
       <header className="border-b border-slate-800/60 bg-slate-950/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
           <NavLink to="/" className="flex items-center gap-2 text-base font-semibold text-white">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-600 text-xs font-bold">
-              C
-            </span>
+            <img src="/android-chrome-192x192.png" alt="" className="h-7 w-7 rounded-lg" />
             Cortex
           </NavLink>
 

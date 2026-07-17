@@ -2,11 +2,12 @@ import shutil
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, Request, UploadFile
 from sqlalchemy.orm import Session
 
 from core.config import settings
 from core.deps import get_current_user
+from core.limiter import limiter
 from db.database import SessionLocal, get_db
 from models.document import Document, DocumentStatus
 from models.user import User
@@ -35,7 +36,9 @@ def _get_owned_document(db: Session, document_id: int, owner_id: int) -> Documen
 
 
 @router.post("", response_model=DocumentRead, status_code=201)
+@limiter.limit("10/hour")
 def upload_document(
+    request: Request,
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     db: Session = Depends(get_db),

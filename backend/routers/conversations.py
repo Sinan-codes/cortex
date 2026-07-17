@@ -1,10 +1,11 @@
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from core.config import settings
 from core.deps import get_current_user
+from core.limiter import limiter
 from db.database import get_db
 from models.conversation import Conversation
 from models.document import Document
@@ -101,7 +102,9 @@ def list_messages(
 
 
 @router.post("/{conversation_id}/messages", response_model=MessageRead, status_code=201)
+@limiter.limit("60/hour")
 def send_message(
+    request: Request,
     conversation_id: int,
     body: MessageCreate,
     db: Session = Depends(get_db),
