@@ -24,16 +24,16 @@ If a question falls outside the uploaded documents, the assistant explicitly say
 ## Architecture
 
 ```
-┌─────────────┐      REST + cookies       ┌──────────────┐       ┌─────────────┐
-│   React      │ ───────────────────────▶ │   FastAPI     │──────▶│  PostgreSQL  │
-│   frontend   │ ◀─────────────────────── │   backend     │◀──────│  + pgvector  │
+┌─────────────┐      REST + cookies        ┌──────────────┐       ┌─────────────┐
+│   React     │ ───────────────────────▶   │   FastAPI    │──────▶│  PostgreSQL │
+│   frontend  │ ◀───────────────────────   │   backend    │◀──────│  + pgvector │
 └─────────────┘                            └──────┬───────┘       └─────────────┘
                                                     │
                                                     ▼
                                             ┌──────────────┐
-                                            │   OpenAI API   │
-                                            │ (embeddings +  │
-                                            │  chat model)   │
+                                            │   OpenAI API │
+                                            │ (embeddings +│
+                                            │  chat model) │
                                             └──────────────┘
 ```
 
